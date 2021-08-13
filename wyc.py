@@ -168,9 +168,9 @@ class DSmodel:
                 sim_matrix[i, j] = self.__sim_by_martix_D(BPA[i], BPA[j])
                 sim_matrix[j, i] = sim_matrix[i, j]
         sups = sim_matrix.sum(1).squeeze()
-        # Fs = self.__get_sorting_factor(BPA)
-        # msups = sups * Fs / (sups * Fs).sum()
-        msups = sups
+        Fs = self.__get_sorting_factor(BPA)
+        msups = sups * Fs / (sups * Fs).sum()
+        # msups = sups
         Ens = np.asarray([self.__Deng_entropy(m) for m in BPA])
         ucs = -msups + msups.mean()
         gsups = msups * ((Ens / Ens.sum()) ** ucs)
@@ -197,9 +197,9 @@ class DSmodel:
                 )
                 sim_matrix[j, i] = sim_matrix[i, j]
         sups = sim_matrix.sum(1).squeeze()
-        # Fs = self.__get_sorting_factor(BPA)
-        # msups = sups * Fs / (sups * Fs).sum()
-        msups = sups
+        Fs = self.__get_sorting_factor(BPA)
+        msups = sups * Fs / (sups * Fs).sum()
+        # msups = sups
         Ens = np.asarray([self.__Deng_entropy(m) for m in BPA])
         ucs = -msups + msups.mean()
         gsups = msups * ((Ens / Ens.sum()) ** ucs)
@@ -226,9 +226,9 @@ class DSmodel:
                 sim_matrix[i, j] = max_distance - wasserstein_distance(BPA[i], BPA[j])
                 sim_matrix[j, i] = sim_matrix[i, j]
         sups = sim_matrix.sum(1).squeeze()
-        # Fs = self.__get_sorting_factor(BPA)
-        # msups = sups * Fs / (sups * Fs).sum()
-        msups = sups
+        Fs = self.__get_sorting_factor(BPA)
+        msups = sups * Fs / (sups * Fs).sum()
+        # msups = sups
         Ens = np.asarray([self.__Deng_entropy(m) for m in BPA])
         ucs = -msups + msups.mean()
         gsups = msups * ((Ens / Ens.sum()) ** ucs)
