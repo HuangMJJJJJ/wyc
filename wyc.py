@@ -330,33 +330,32 @@ if __name__ == "__main__":
         )
     )
     for train_size in tqdm(range(len(target_names), data_count - 1, len(target_names))):
-        for random_num in range(100):
-            sss = StratifiedShuffleSplit(
-                n_splits=1, train_size=train_size, random_state=random_num
+        sss = StratifiedShuffleSplit(
+            n_splits=100, train_size=train_size, random_state=42
+        )
+        for train_idx, test_idx in sss.split(features, targets):
+            train_features, train_targets = features[train_idx], targets[train_idx]
+            test_features, test_targets = features[test_idx], targets[test_idx]
+            ds = DSmodel(train_features, train_targets, feature_names, target_names)
+            acc_count, sum_count = np.zeros(len(methons)), 0
+            for test_feature, test_target in zip(test_features, test_targets):
+                sum_count += 1
+                for idx, methon in enumerate(methons):
+                    acc_count[idx] += (
+                        1
+                        if ds.predict(test_feature, methon=methon).argmax()
+                        == test_target
+                        else 0
+                    )
+            acc_count = acc_count / sum_count
+            result_df = result_df.append(
+                {
+                    "train ratio": 1 - sum_count / data_count,
+                    "base acc ratio": acc_count[0],
+                    "methon1 acc ratio": acc_count[1],
+                    "methon2 acc ratio": acc_count[2],
+                    "methon3 acc ratio": acc_count[3],
+                },
+                ignore_index=True,
             )
-            for train_idx, test_idx in sss.split(features, targets):
-                train_features, train_targets = features[train_idx], targets[train_idx]
-                test_features, test_targets = features[test_idx], targets[test_idx]
-                ds = DSmodel(train_features, train_targets, feature_names, target_names)
-                acc_count, sum_count = np.zeros(len(methons)), 0
-                for test_feature, test_target in zip(test_features, test_targets):
-                    sum_count += 1
-                    for idx, methon in enumerate(methons):
-                        acc_count[idx] += (
-                            1
-                            if ds.predict(test_feature, methon=methon).argmax()
-                            == test_target
-                            else 0
-                        )
-                acc_count = acc_count / sum_count
-                result_df = result_df.append(
-                    {
-                        "train ratio": 1 - sum_count / data_count,
-                        "base acc ratio": acc_count[0],
-                        "methon1 acc ratio": acc_count[1],
-                        "methon2 acc ratio": acc_count[2],
-                        "methon3 acc ratio": acc_count[3],
-                    },
-                    ignore_index=True,
-                )
-    result_df.to_csv("result_dif_range_num_mat_w2sim.csv")
+    result_df.to_csv("result_constRangeNum_mat_w2sim.csv")
