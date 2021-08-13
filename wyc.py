@@ -223,7 +223,7 @@ class DSmodel:
             for j in range(i, BPA.shape[0]):
                 if i == j:
                     continue
-                sim_matrix[i, j] = max_distance - wasserstein_distance(BPA[i], BPA[j])
+                sim_matrix[i, j] = wasserstein_distance(BPA[i], BPA[j])
                 sim_matrix[j, i] = sim_matrix[i, j]
         sups = sim_matrix.sum(1).squeeze()
         # Fs = self.__get_sorting_factor(BPA)
@@ -359,4 +359,4 @@ if __name__ == "__main__":
                     },
                     ignore_index=True,
                 )
-    result_df.to_csv("result_dif_range_num_nonmat.csv")
+    result_df.to_csv("result_dif_range_num_nonmat_w2sim.csv")
