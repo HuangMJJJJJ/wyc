@@ -10,15 +10,11 @@
 import sys
 from typing import Any, Union
 
-from scipy.sparse.extract import find
-
 if sys.version_info >= (3, 8):
     from typing import Literal
 from functools import reduce
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from sklearn.datasets import load_iris
 from sklearn.model_selection import StratifiedShuffleSplit
 from scipy.stats import wasserstein_distance
@@ -153,6 +149,7 @@ class DSmodel:
         RST = BPA[0]
         for row in BPA[1:]:
             RST = self.__Dempster_combin(RST, row)
+            RST = RST / RST.sum()   # 防止多次迭代后的精度误差
         return RST
 
     def methon1(self, BPA):
@@ -179,6 +176,7 @@ class DSmodel:
         RST = MAE[:]
         for i in range(BPA.shape[0]):
             RST = self.__Dempster_combin(MAE, RST)
+            RST = RST / RST.sum()   # 防止多次迭代后的精度误差
         return RST
 
     def methon2(self, BPA):
@@ -208,6 +206,7 @@ class DSmodel:
         RST = MAE[:]
         for i in range(BPA.shape[0]):
             RST = self.__Dempster_combin(MAE, RST)
+            RST = RST / RST.sum()
         return RST
 
     def methon3(self, BPA):
@@ -237,6 +236,7 @@ class DSmodel:
         RST = MAE[:]
         for i in range(BPA.shape[0]):
             RST = self.__Dempster_combin(MAE, RST)
+            RST = RST / RST.sum()
         return RST
 
     def __Dempster_combin(self, m1, m2):
