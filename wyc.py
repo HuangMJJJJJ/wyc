@@ -331,7 +331,7 @@ if __name__ == "__main__":
     )
     for train_size in tqdm(range(len(target_names), data_count - 1, len(target_names))):
         sss = StratifiedShuffleSplit(
-            n_splits=100, train_size=train_size, random_state=42
+            n_splits=100, train_size=120, random_state=42
         )
         for train_idx, test_idx in sss.split(features, targets):
             train_features, train_targets = features[train_idx], targets[train_idx]
